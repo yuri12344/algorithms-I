@@ -1,6 +1,7 @@
 // Quick Union Lazy Approach
 public class QuickUnionUF {
     private int[] id;
+    private int[] sz; // for weighting
 
     public QuickUnionUF(int N) {
         id = new int[N];
@@ -11,6 +12,7 @@ public class QuickUnionUF {
 
     private int root(int i) {
         while (i != id[i]) {
+            id[i] = id[id[i]]; // Flat the tree, improve the speed
             i = id[i];
         }
         return i;
@@ -20,10 +22,19 @@ public class QuickUnionUF {
         return root(p) == root(q);
     }
 
-    public void union(int p, int q) {
+    public void quickunion(int p, int q) {
         int i = root(p);
         int j = root(q);
-        id[i] = j;
-    }
 
+        if (i == j) return ;
+
+
+        if (sz[i] < sz[j]) {
+            id[i] = j;
+            sz[j] += sz[i];
+        } else {
+            id[j] = i;
+            sz[i] += sz[j];
+        }
+    }
 }
